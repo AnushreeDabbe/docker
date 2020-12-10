@@ -1,0 +1,44 @@
+version: '2.1'
+services:
+ 
+  SoulmateRestService:
+    image: soulmateimage
+    build: SoulmateRestService/
+    restart: always
+    network_mode: host
+    depends_on:
+      - mongo
+      - eureka-server
+    ports:
+      - 8090:8090
+    healthcheck:
+      test: "exit 0"
+
+  eureka-server:
+    image: serviceimage
+    build: eureka-server/
+    restart: always
+    network_mode: host
+    ports:
+      - 8099:8099
+    healthcheck:
+      test: "exit 0"
+ 
+  apigateway-service:
+    image: apiservice
+    build: apigateway-service/
+    restart: always
+    network_mode: host
+    ports:
+      - 8085:8085
+    healthcheck:
+      test: "exit 0"
+
+  mongo:
+    image: mongo:3.2-jessie
+    ports:
+     - 27017:27017
+    container_name: mongo
+    network_mode: host
+    healthcheck:
+      test: "exit 0"
